@@ -4,10 +4,11 @@ from lavi.datasets.datasets.vid_base_dataset import Dataset_Base
 
 class CC3MDataset(Dataset_Base):
     def __init__(self, size_img, img_transform, size_frame, dataset, split, 
-                 data_dir, part=None):
+                 data_dir, part=None, instruction=False):
         super().__init__(size_img, img_transform, split=split,
                          size_frame=size_frame)
 
+        self.instruction = instruction
         self.dataset, self.part = dataset, part
         #self.size_img, self.size_frame = size_img, size_frame
         if data_dir is not None:
@@ -89,7 +90,11 @@ class CC3MDataset(Dataset_Base):
             _C = 3
             img = T.zeros((_T, _C, _H, _W))
 
-
+        instruction_input = "Please describe the image."
+        
+        if self.instruction:
+            return {'image': img, 'text_input': raw_txt, 'instruction_input': instruction_input}
+        
         return {'image': img, 'text_input': raw_txt}
 
     #def collate_batch(self, inputs):
