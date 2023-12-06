@@ -132,13 +132,40 @@ class LAVI(BaseModel):
         else:
             return img_embeds, atts_img
 
+
+    def instruction_prompt_wrap(self, img_embeds, atts_img, prompt):
+        if prompt:
+            batch_size = img_embeds.shape[0]
+            p_before = []
+            p_after = []
+
+            for i in range(batch_size):
+                p_b, p_a = prompt[i].split('<ImageHere>')
+                p_before.append(p_b)
+                p_after.append(p_a)
+  
+            p_before_tokens = self.llama_tokenizer(
+                p_before, return_tensors="pt", padding='longest', add_special_tokens=False).to(img_embeds.device)
+            p_after_tokens = self.llama_tokenizer(
+                p_after, return_tensors="pt", padding='longest', add_special_tokens=False).to(img_embeds.device)
+            p_before_embeds = self.llama_model.model.embed_tokens(p_before_tokens.input_ids)
+            p_after_embeds = self.llama_model.model.embed_tokens(p_after_tokens.input_ids)
+            wrapped_img_embeds = torch.cat([p_before_embeds, img_embeds, p_after_embeds], dim=1)
+            wrapped_atts_img = torch.cat([p_before_tokens.attention_mask, atts_img, p_after_tokens.attention_mask], dim=1)
+            return wrapped_img_embeds, wrapped_atts_img
+        else:
+            return img_embeds, atts_img
+
     def forward(self, samples):
         image = samples["image"]
         img_embeds, atts_img = self.encode_img(image)
-        if hasattr(samples, 'question_split'):  # VQA dataset
-            print('VQA Batch')
-            vqa_prompt = '###Human: <Img><ImageHere></Img> '
-            img_embeds, atts_img = self.prompt_wrap(img_embeds, atts_img, vqa_prompt)
+        if 'instruction_input' in samples:  # instruction dataset
+            #print('Instruction Batch')
+            instruction_prompt = []
+            for instruction in samples['instruction_input']:
+                prompt = '<Image><ImageHere></Image> ' + instruction
+                instruction_prompt.append(self.prompt_template.format(prompt))
+            img_embeds, atts_img = self.instruction_prompt_wrap(img_embeds, atts_img, instruction_prompt)
         elif self.prompt_list:
             prompt = random.choice(self.prompt_list)
             img_embeds, atts_img = self.prompt_wrap(img_embeds, atts_img, prompt)
