@@ -20,10 +20,9 @@ model:
 
 
 datasets:
-  #webvid:
-  #  data_type: images
   cc3m:
     data_type: images
+    instruction: False
 
 
 run:
