@@ -17,6 +17,9 @@ model:
 
   prompt: ""
   ckpt: "/content/drive/MyDrive/CIS5300_project/lavi_models_v1/20231204045/checkpoint_3.pth"
+  max_txt_len: 160
+  end_sym: "###"
+  prompt_template: '###Human: {} ###Assistant: '
 
 
 datasets:
