@@ -42,6 +42,7 @@ class LAVI(BaseModel):
         super().__init__()
 
         self.low_resource = low_resource
+        self.prompt_template = prompt_template
 
         print('Loading Vision Encoder')
         self.visual_encoder = EncVideo(
