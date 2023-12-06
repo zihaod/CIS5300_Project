@@ -96,6 +96,7 @@ class CC3MBuilder(BaseDatasetBuilder):
                 split=self.config.split, 
                 data_dir=self.config.data_dir, 
                 part=self.config.part
+                instruction=self.config.instruction
             )
         else: #part should be int list
             all_datasets = []
@@ -109,7 +110,8 @@ class CC3MBuilder(BaseDatasetBuilder):
                         dataset=self.config.dataset, 
                         split=self.config.split, 
                         data_dir=self.config.data_dir, 
-                        part=i
+                        part=i,
+                        instruction=self.config.instruction
                     )
                 )
             datasets['train'] = torch.utils.data.ConcatDataset(all_datasets)
