@@ -38,12 +38,12 @@ run:
   max_epoch: 4
   batch_size_train: 8 
   batch_size_eval: 8 
-  num_workers: 1
+  num_workers: 0
   warmup_steps: 5000
   iters_per_epoch: 10000
 
   seed: 42
-  output_dir: "/content/drive/MyDrive/model_weights/lavi" #"./output"
+  output_dir: "/content/drive/MyDrive/CIS5300_project/lavi_models_v1" 
 
   amp: True
   resume_ckpt_path: null
