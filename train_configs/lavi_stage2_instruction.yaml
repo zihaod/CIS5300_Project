@@ -15,8 +15,8 @@ model:
   # Vicuna
   llama_model: '/content/drive/MyDrive/model_weights/llama_weights_new/7B_vicuna'
 
-  # generation configs
   prompt: ""
+  ckpt: "/content/drive/MyDrive/CIS5300_project/lavi_models_v1/20231204045/checkpoint_3.pth"
 
 
 datasets:
