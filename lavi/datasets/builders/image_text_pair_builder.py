@@ -95,7 +95,7 @@ class CC3MBuilder(BaseDatasetBuilder):
                 dataset=self.config.dataset, 
                 split=self.config.split, 
                 data_dir=self.config.data_dir, 
-                part=self.config.part
+                part=self.config.part,
                 instruction=self.config.instruction
             )
         else: #part should be int list
