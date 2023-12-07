@@ -1,0 +1,60 @@
+model:
+  arch: lavi
+  model_type: pretrain_vicuna
+
+  # vit encoder
+  #max_size_frame: 6
+  #max_size_patch: 14
+  #size_img: 224
+  #vis_backbone_size: 'base'
+  #vis_backbone_init: '3d'
+  #kinetics: 600
+  #vis_hidden_size: 768
+  lavender_model: '/content/CIS5300_Project/_models/lavender/lavender_scale_up_pretrain.pt'
+
+  # Vicuna
+  llama_model: '/content/drive/MyDrive/model_weights/llama_weights_new/7B_vicuna'
+
+  prompt: ""
+  ckpt: "/content/drive/MyDrive/CIS5300_project/lavi_models_v1/20231204045/checkpoint_3.pth"
+  max_txt_len: 160
+  end_sym: "###"
+  prompt_template: '###Human: {} ###Assistant: '
+
+
+datasets:
+  cc3m:
+    data_type: images
+    instruction: True
+    split: val
+
+
+run:
+  task: image_text_pretrain
+  # optimizer
+  lr_sched: "linear_warmup_cosine_lr"
+  init_lr: 1e-4
+  min_lr: 8e-5
+  warmup_lr: 1e-6
+
+  weight_decay: 0.05
+  max_epoch: 4
+  batch_size_train: 8 
+  batch_size_eval: 8 
+  num_workers: 0
+  warmup_steps: 5000
+  iters_per_epoch: 10000
+
+  seed: 42
+  output_dir: "/content/drive/MyDrive/CIS5300_project/lavi_models_v2" 
+
+  amp: True
+  resume_ckpt_path: null
+
+  evaluate: False 
+  train_splits: ["train"]
+
+  device: "cuda"
+  world_size: 1
+  dist_url: "env://"
+  distributed: True
