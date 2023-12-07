@@ -42,8 +42,8 @@ run:
   batch_size_train: 8 
   batch_size_eval: 8 
   num_workers: 0
-  warmup_steps: 5000
-  iters_per_epoch: 10000
+  warmup_steps: 2000
+  iters_per_epoch: 2000
 
   seed: 42
   output_dir: "/content/drive/MyDrive/CIS5300_project/lavi_models_v2" 
